@@ -1,5 +1,5 @@
 exports = function(payload) {
-  const collection =             context.services.get("azure").db("sample_mflix").collection("movies");
+  const collection =             context.services.get("mongodb-atlas").db("sample_mflix").collection("movies");
   let arg = payload.query.arg;
   return collection.aggregate([
       { $searchBeta: {
