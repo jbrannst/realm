@@ -1,0 +1,22 @@
+exports = function(payload) {
+  const collection =             context.services.get("azure").db("sample_mflix").collection("movies");
+  let arg = payload.query.arg;
+  return collection.aggregate([
+      { $searchBeta: {
+                     search: {
+                        query: arg,
+                        path:'fullplot',
+                      },
+                      highlight: { path: 'fullplot' }
+              }},
+              { $project: {
+                     title: 1,
+                     _id:0,
+                     year:1,
+                     fullplot:1,
+                     score: { $meta: 'searchScore'},
+                     highlight: {$meta: 'searchHighlights'}
+              }},
+              { $limit: 10}
+      ]).toArray();
+};
